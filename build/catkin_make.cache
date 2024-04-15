@@ -1,0 +1,2 @@
+shark_pkg
+-DCATKIN_DEVEL_PREFIX=/home/shen/sea_ws/devel -DCMAKE_INSTALL_PREFIX=/home/shen/sea_ws/install -G Unix Makefiles

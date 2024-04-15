@@ -1,0 +1,4 @@
+<launch>
+    <!-- Launch the turtlesim node without spawning any turtles -->
+    <node name="turtlesim_node" pkg="turtlesim" type="turtlesim_node"/>
+</launch>
