@@ -354,6 +354,108 @@ def rotate_turtles(relative_angle_degree):
         if not (current_angle_degree_T1 < relative_angle_degree):
             break
 
+def go_to_goal(x_goal, y_goal):
+    global turtle1_pose
+    velocity_message = Twist()
+    # specify trutlename here and change pose accordingly
+    cmd_vel_topic='/turtle1/cmd_vel'
+    velocity_publisher = rospy.Publisher(cmd_vel_topic, Twist, queue_size=10)
+    while (True):
+        K_linear = 1 
+        distance = abs(math.sqrt(((x_goal-turtle1_pose.x) ** 2) + ((y_goal-turtle1_pose.y) ** 2)))
+        linear_speed = distance * K_linear
+        K_angular = 4.0
+        desired_angle_goal = math.atan2(y_goal-turtle1_pose.y, x_goal-turtle1_pose.x)
+        angular_speed = (desired_angle_goal-turtle1_pose.theta)*K_angular
+        velocity_message.linear.x = linear_speed
+        velocity_message.angular.z = angular_speed
+        velocity_publisher.publish(velocity_message)
+        print(50*'#')
+        print ('vlinear_msg',velocity_message.linear.x)
+        print ('vangular_msg',velocity_message.angular.z)
+        print ('x=', turtle1_pose.x, 'y=',turtle1_pose.y)
+        print(50*'#')
+        if (distance <0.01):
+            break
+
+def all_go_to_goal(x1,y1, x2,y2, x3,y3):
+    global turtle1_pose
+    global turtle2_pose
+    global turtle3_pose
+    pub1 = rospy.Publisher('/turtle1/cmd_vel', Twist, queue_size=10)
+    pub2 = rospy.Publisher('/turtle2/cmd_vel', Twist, queue_size=10)
+    pub3 = rospy.Publisher('/turtle3/cmd_vel', Twist, queue_size=10)
+    rate = rospy.Rate(10)  # 10Hz
+    K_linear = 1 
+    K_angular = 4.0
+    while (True):
+        distance1 = abs(math.sqrt(((x1-turtle1_pose.x) ** 2) + ((y1-turtle1_pose.y) ** 2)))
+        linear_speed1 = distance1 * K_linear
+        desired_angle_goal1 = math.atan2(y1-turtle1_pose.y, x1-turtle1_pose.x)
+        angular_speed1 = (desired_angle_goal1-turtle1_pose.theta)*K_angular
+
+        distance2 = abs(math.sqrt(((x2-turtle2_pose.x) ** 2) + ((y2-turtle2_pose.y) ** 2)))
+        linear_speed2 = distance2 * K_linear
+        desired_angle_goal2 = math.atan2(y2-turtle2_pose.y, x2-turtle2_pose.x)
+        angular_speed2 = (desired_angle_goal2-turtle2_pose.theta)*K_angular
+
+        distance3 = abs(math.sqrt(((x3-turtle3_pose.x) ** 2) + ((y3-turtle3_pose.y) ** 2)))
+        linear_speed3 = distance3 * K_linear
+        desired_angle_goal3 = math.atan2(y3-turtle3_pose.y, x3-turtle3_pose.x)
+        angular_speed3 = (desired_angle_goal3-turtle3_pose.theta)*K_angular
+        if distance1 > 0.01:
+            vel_msg1 = Twist()
+            vel_msg1.linear.x = linear_speed1
+            vel_msg1.angular.z = angular_speed1
+            pub1.publish(vel_msg1)
+            print(50*'#')
+            print ('vlinear_msg',vel_msg1.linear.x)
+            print ('vangular_msg',vel_msg1.angular.z)
+            print ('x=', turtle1_pose.x, 'y=',turtle1_pose.y)
+            print(50*'#')
+        else:
+            vel_msg1 = Twist()
+            pub1.publish(vel_msg1)
+            
+        
+        if distance2 > 0.01:
+            vel_msg2 = Twist()
+            vel_msg2.linear.x = linear_speed2
+            vel_msg2.angular.z = angular_speed2
+            pub2.publish(vel_msg2)
+            print(50*'#')
+            print ('vlinear_msg',vel_msg2.linear.x)
+            print ('vangular_msg',vel_msg2.angular.z)
+            print ('x=', turtle2_pose.x, 'y=',turtle2_pose.y)
+            print(50*'#')
+        else:
+            vel_msg2 = Twist()
+            pub2.publish(vel_msg2)
+            
+        
+        if distance3 > 0.01:
+            vel_msg3 = Twist()
+            vel_msg3.linear.x = linear_speed3
+            vel_msg3.angular.z = angular_speed3
+            pub3.publish(vel_msg3)
+            print(50*'#')
+            print ('vlinear_msg',vel_msg3.linear.x)
+            print ('vangular_msg',vel_msg3.angular.z)
+            print ('x=', turtle3_pose.x, 'y=',turtle3_pose.y)
+            print(50*'#')
+        else:
+            vel_msg3 = Twist()
+            pub3.publish(vel_msg3)
+            
+        if ((distance1 <0.01) and (distance2 <0.01) and (distance3 <0.01)):
+            break
+
+        rate.sleep()
+
+
+
+
+
 def main():
     rospy.init_node('multi_turtle_control', anonymous=True)
     rospy.Subscriber("/turtle1/pose", Pose, turtle1_callback) 
@@ -370,25 +472,27 @@ def main():
     # move_turtle1("turtle1",4, 1.0,True)
     # move_turtle2("turtle2",4, 1.0,True)
     # move_turtle3("turtle3",4, 1.0,True)
-
-    move_turtles(4,1,2,3)
-    time.sleep(2)
     # rotate_turtle1(50,100,True)
     # rotate_turtle2(70,140,False)
     # rotate_turtle3(100,200,True)
-
     # move_turtles(4)
-    rotate_turtles(90)
-    time.sleep(2)
-    move_turtles(4,1,2,3)
-    time.sleep(2)
-    rotate_turtles(90)
-    time.sleep(2)
-    move_turtles(4,1,2,3)
-    time.sleep(2)
-    rotate_turtles(90)
-    time.sleep(2)
-    move_turtles(4,1,2,3)
+  
+  
+    # move_turtles(4,1,2,3)
+    # time.sleep(2)
+    # rotate_turtles(90)
+    # time.sleep(2)
+    # move_turtles(4,1,2,3)
+    # time.sleep(2)
+    # rotate_turtles(90)
+    # time.sleep(2)
+    # move_turtles(4,1,2,3)
+    # time.sleep(2)
+    # rotate_turtles(90)
+    # time.sleep(2)
+    # move_turtles(4,1,2,3)
 
+    # go_to_goal(8,8)
+    all_go_to_goal(8,8, 8,1.5, 3,10)
 if __name__ == '__main__':
     main()
