@@ -1,8 +1,0 @@
-prefix=/home/shen/sea_ws/devel
-
-Name: shark_pkg
-Description: Description of shark_pkg
-Version: 0.0.0
-Cflags: -I/home/shen/sea_ws/src/shark_pkg/include
-Libs: -L${prefix}/lib -lshark_pkg
-Requires: rospy std_msgs message_runtime
