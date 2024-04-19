@@ -1,0 +1,5 @@
+<launch>
+    <!-- Launch turtlesim node -->
+    <node name="turtlesim_node" pkg="turtlesim" type="turtlesim_node"/>
+</launch>
+
